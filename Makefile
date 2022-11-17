@@ -7,3 +7,6 @@ create-stack:
 
 update-stack:
 	pipenv run pulumi up
+
+cleanup:
+	pulumi destroy
