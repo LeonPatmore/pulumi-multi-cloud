@@ -3,8 +3,15 @@
 ## Resources
 
 - https://www.pulumi.com/docs/intro/concepts/how-pulumi-works/
-
 - https://github.com/pulumi/examples/blob/master/aws-py-s3-folder/__main__.py
+
+### Existing Solutions
+
+#### Serverless
+
+- https://github.com/serverless/multicloud
+- https://github.com/mikestaub/serverless-express
+- https://github.com/jasonumiker/serverless-multicloud-example
 
 ## Requirements
 
