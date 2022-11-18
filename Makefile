@@ -14,3 +14,6 @@ update-stack:
 
 cleanup:
 	pulumi destroy
+
+check-plugins:
+	pulumi plugin ls
