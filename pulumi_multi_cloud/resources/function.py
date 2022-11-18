@@ -42,7 +42,7 @@ class MultiCloudFunctionType(MultiCloudResourceType):
         return {
             "code": self.files,
             "runtime": AWS_RUNTIME[self.runtime],
-            "handler": "handler.handle",
+            "handler": f"main.handle",
             "role": self.permissions.arn
         }
 
@@ -58,5 +58,6 @@ class MultiCloudFunctionType(MultiCloudResourceType):
             "entry_point": "handle",
             "source_archive_bucket": bucket.name,
             "source_archive_object": code_object.name,
-            "trigger_http": True
+            "trigger_http": True,
+            "region": "europe-west2"
         }

@@ -1,0 +1,3 @@
+Better region abstraction
+Improve function file handling
+Split function handler so it can support the different interfaces for each cloud provider
