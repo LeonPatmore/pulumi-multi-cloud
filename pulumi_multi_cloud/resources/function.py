@@ -22,6 +22,13 @@ AWS_RUNTIME = {
 }
 
 
+class FunctionHandler:
+
+    def __init__(self, file: str = "main", method: str = "handle"):
+        self.file = file
+        self.method = method
+
+
 class MultiCloudFunctionType(MultiCloudResourceType):
 
     aws_type = lambda_.function.Function
@@ -32,17 +39,19 @@ class MultiCloudFunctionType(MultiCloudResourceType):
                  name: str,
                  runtime: FunctionRuntime,
                  files: Archive,
-                 permissions: MultiCloudResource):
+                 permissions: MultiCloudResource,
+                 function_handler: FunctionHandler = FunctionHandler()):
         super().__init__(region, name)
-        self.permissions = permissions
         self.runtime = runtime
         self.files = files
+        self.permissions = permissions
+        self.function_handler = function_handler
 
     def aws_kwargs(self) -> dict:
         return {
             "code": self.files,
             "runtime": AWS_RUNTIME[self.runtime],
-            "handler": f"main.handle",
+            "handler": f"{self.function_handler.file}.{self.function_handler.method}",
             "role": self.permissions.arn
         }
 
@@ -55,7 +64,7 @@ class MultiCloudFunctionType(MultiCloudResourceType):
         bucket, code_object = self._upload_gcp_code()
         return {
             "runtime": GCP_RUNTIME[self.runtime],
-            "entry_point": "handle",
+            "entry_point": self.function_handler.method,
             "source_archive_bucket": bucket.name,
             "source_archive_object": code_object.name,
             "trigger_http": True,
