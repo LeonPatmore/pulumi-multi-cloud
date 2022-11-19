@@ -1,13 +1,20 @@
+import pulumi
 from pulumi_gcp import storage
 from pulumi_gcp.cloudfunctions import Function, FunctionIamMember
 
-from pulumi_multi_cloud.common import MultiCloudResourceCreation
 from pulumi_multi_cloud.gcp.common import GcpCloudResource
-from pulumi_multi_cloud.resources.function import FunctionRuntime, ProviderFunctionResourceGenerator
+from pulumi_multi_cloud.resources.function import FunctionRuntime, ProviderFunctionResourceGenerator, \
+    MultiCloudFunctionCreation
 
 GCP_RUNTIME = {
     FunctionRuntime.Python39: "python39"
 }
+
+
+class GcpFunctionCreation(MultiCloudFunctionCreation):
+
+    def http_url(self) -> pulumi.Output[str]:
+        return self.main_resource.https_trigger_url
 
 
 class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
@@ -17,7 +24,7 @@ class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
         code_object = storage.BucketObject("python-zip", bucket=bucket.name, source=self.files)
         return bucket, code_object
 
-    def generate_resources(self) -> MultiCloudResourceCreation:
+    def generate_resources(self) -> MultiCloudFunctionCreation:
         bucket, code_object = self._upload_gcp_code()
         function = Function(self.name,
                             runtime=GCP_RUNTIME[self.runtime],
@@ -26,7 +33,7 @@ class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
                             source_archive_object=code_object.name,
                             trigger_http=self.http_trigger is not None,
                             region="europe-west2")
-        creation = MultiCloudResourceCreation(GcpCloudResource.given(function))\
+        creation = GcpFunctionCreation(GcpCloudResource.given(function))\
             .with_resource(GcpCloudResource.given(bucket))\
             .with_resource(GcpCloudResource.given(code_object))
 
@@ -38,5 +45,4 @@ class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
                                     role="roles/cloudfunctions.invoker",
                                     member="allUsers")
             creation.with_resource(GcpCloudResource.given(iam))
-
         return creation

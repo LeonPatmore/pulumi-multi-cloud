@@ -23,7 +23,7 @@ class MultiCloudResourceCreation:
 
     def __init__(self,
                  main_resource: MultiCloudResource or None,
-                 secondary_resources: list[MultiCloudResource] = None):
+                 secondary_resources: list[type(MultiCloudResource)] = None):
         if secondary_resources is None:
             secondary_resources = []
         self.main_resource = main_resource
@@ -48,7 +48,7 @@ class ProviderCloudResourceGenerator:
 
 class MultiCloudResourceType:
 
-    def __init__(self, provider_map: dict[CloudProvider, type[ProviderCloudResourceGenerator]]):
+    def __init__(self, provider_map: dict[CloudProvider, type(ProviderCloudResourceGenerator)]):
         self.provider_map = provider_map
 
 
@@ -60,7 +60,7 @@ class MultiCloudResourceFactory:
         self.region = region
         self.provider = provider
 
-    def create(self, resource_type: MultiCloudResourceType, name: str, **kwargs) -> MultiCloudResourceCreation:
+    def create(self, resource_type: MultiCloudResourceType, name: str, **kwargs) -> type(MultiCloudResourceCreation):
         provider_resource_generator = resource_type.provider_map.get(self.provider)
         if provider_resource_generator is None:
             return MultiCloudResourceCreation(None)

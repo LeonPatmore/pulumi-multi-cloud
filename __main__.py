@@ -1,2 +1,2 @@
 
-import s3_multi_cloud_example
+import multi_cloud_example
