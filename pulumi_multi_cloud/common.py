@@ -65,4 +65,3 @@ class MultiCloudResourceFactory:
         if provider_resource_generator is None:
             return MultiCloudResourceCreation(None)
         return provider_resource_generator(name, self.region, **kwargs).generate_resources()
-

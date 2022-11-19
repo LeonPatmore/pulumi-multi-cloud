@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 import pulumi
@@ -41,6 +42,16 @@ class AwsFunctionGenerator(ProviderFunctionResourceGenerator):
                             "httpMethod": "POST"
                         }
                     }
+                },
+                "/": {
+                    "x-amazon-apigateway-any-method": {
+                        "x-amazon-apigateway-integration": {
+                            "uri": lambda_uri,
+                            "passthroughBehavior": "when_no_match",
+                            "type": "aws_proxy",
+                            "httpMethod": "POST"
+                        }
+                    }
                 }
             }
         }
@@ -56,7 +67,11 @@ class AwsFunctionGenerator(ProviderFunctionResourceGenerator):
         deployment = apigateway.Deployment("api-deployment",
                                            rest_api=api.id,
                                            stage_name="Prod",
-                                           opts=ResourceOptions(depends_on=[api]))
+                                           opts=ResourceOptions(depends_on=[api]),
+                                           triggers={
+                                               "redeployment": api.body.apply(lambda body: json.dumps(body)).apply(
+                                                   lambda to_json: hashlib.sha1(to_json.encode()).hexdigest()),
+                                           })
         invoke_permission = lambda_.Permission("api-lambda-permission",
                                                action="lambda:invokeFunction",
                                                function=func.name,

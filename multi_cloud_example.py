@@ -9,7 +9,6 @@ code = AssetArchive({".": FileArchive("./example")})
 
 
 def my_cool_exposed_function(gen: MultiCloudResourceFactory):
-    bucket = gen.create(DefaultTypes.Bucket.value, "leon-multicloud").main_resource
     permissions = gen.create(DefaultTypes.Permissions.value, name="function-permissions").main_resource
     function_handler = FunctionHandler(method="handle_aws" if gen.provider == CloudProvider.AWS else "handle_gcp")
     function_trigger = FunctionHttpTrigger(public=True)
@@ -19,10 +18,10 @@ def my_cool_exposed_function(gen: MultiCloudResourceFactory):
                           files=code,
                           function_handler=function_handler,
                           permissions=permissions,
-                          http_trigger=function_trigger).main_resource
+                          http_trigger=function_trigger)
 
-    pulumi.export(f"bucket_id_{gen.provider.name}", bucket.get_id())
-    pulumi.export(f"function_id_{gen.provider.name}", function.get_id())
+    pulumi.export(f"function_id_{gen.provider.name}", function.main_resource.get_id())
+    pulumi.export(f"function_url_{gen.provider.name}", function.http_url())
 
 
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS))
