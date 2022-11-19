@@ -1,25 +1,15 @@
 import enum
 
+import pulumi
 from pulumi import Archive
-from pulumi_aws import lambda_
-from pulumi_gcp import cloudfunctions, storage
 
-from pulumi_multi_cloud.common import CloudRegion, MultiCloudResourceType
+from pulumi_multi_cloud.common import CloudRegion, ProviderCloudResourceGenerator, MultiCloudResourceCreation
 from pulumi_multi_cloud.resources.resource import MultiCloudResource
 
 
 class FunctionRuntime(enum.Enum):
 
     Python39 = enum.auto()
-
-
-GCP_RUNTIME = {
-    FunctionRuntime.Python39: "python39"
-}
-
-AWS_RUNTIME = {
-    FunctionRuntime.Python39: "python3.9"
-}
 
 
 class FunctionHandler:
@@ -29,44 +19,34 @@ class FunctionHandler:
         self.method = method
 
 
-class MultiCloudFunctionType(MultiCloudResourceType):
+class FunctionHttpTrigger:
 
-    aws_type = lambda_.function.Function
-    gcp_type = cloudfunctions.Function
+    def __init__(self, public: bool):
+        self.public = public
+
+
+class MultiCloudFunctionCreation(MultiCloudResourceCreation):
+
+    def http_url(self) -> pulumi.Output[str]:
+        raise NotImplementedError()
+
+
+class ProviderFunctionResourceGenerator(ProviderCloudResourceGenerator):
 
     def __init__(self,
-                 region: CloudRegion,
                  name: str,
+                 region: CloudRegion,
                  runtime: FunctionRuntime,
+                 function_handler: FunctionHandler,
                  files: Archive,
                  permissions: MultiCloudResource,
-                 function_handler: FunctionHandler = FunctionHandler()):
-        super().__init__(region, name)
+                 http_trigger: FunctionHttpTrigger = None):
+        super().__init__(name, region)
         self.runtime = runtime
+        self.function_handler = function_handler
         self.files = files
         self.permissions = permissions
-        self.function_handler = function_handler
+        self.http_trigger = http_trigger
 
-    def aws_kwargs(self) -> dict:
-        return {
-            "code": self.files,
-            "runtime": AWS_RUNTIME[self.runtime],
-            "handler": f"{self.function_handler.file}.{self.function_handler.method}",
-            "role": self.permissions.arn
-        }
-
-    def _upload_gcp_code(self) -> tuple:
-        bucket = storage.Bucket(f"{self.name}-code", location=self.region.name)
-        code_object = storage.BucketObject("python-zip", bucket=bucket.name, source=self.files)
-        return bucket, code_object
-
-    def gcp_kwargs(self) -> dict:
-        bucket, code_object = self._upload_gcp_code()
-        return {
-            "runtime": GCP_RUNTIME[self.runtime],
-            "entry_point": self.function_handler.method,
-            "source_archive_bucket": bucket.name,
-            "source_archive_object": code_object.name,
-            "trigger_http": True,
-            "region": "europe-west2"
-        }
+    def generate_resources(self) -> MultiCloudFunctionCreation:
+        raise NotImplementedError()
