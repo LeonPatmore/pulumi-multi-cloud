@@ -1,15 +1,8 @@
-from pulumi_aws import s3
-from pulumi_gcp.storage import bucket
+from pulumi_multi_cloud.aws.bucket import AwsBucketGenerator
+from pulumi_multi_cloud.common import MultiCloudResourceType, CloudProvider
+from pulumi_multi_cloud.gcp.bucket import GcpBucketGenerator
 
-from pulumi_multi_cloud.common import MultiCloudResourceType
-
-
-class MultiCloudBucketType(MultiCloudResourceType):
-
-    aws_type = s3.Bucket
-    gcp_type = bucket.Bucket
-
-    def gcp_kwargs(self) -> dict:
-        return {
-            "location": self.region.name
-        }
+MULTI_CLOUD_BUCKET_TYPE = MultiCloudResourceType({
+    CloudProvider.AWS: AwsBucketGenerator,
+    CloudProvider.GCP: GcpBucketGenerator
+})

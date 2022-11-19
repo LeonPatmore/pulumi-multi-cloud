@@ -1,8 +1,8 @@
 import enum
-import logging
 
-from pulumi_multi_cloud.aws.common import AwsCloudResource
-from pulumi_multi_cloud.gcp.common import GcpCloudResource
+import pulumi
+
+from pulumi_multi_cloud.resources.resource import MultiCloudResource
 
 
 class CloudRegion(enum.Enum):
@@ -21,22 +21,38 @@ DEFAULT_REGION = CloudRegion.EU
 DEFAULT_PROVIDER = CloudProvider.AWS
 
 
+class ProviderCloudResource:
+
+    def __init__(self, resource: pulumi.Resource, target_class: MultiCloudResource):
+        self.resource = resource
+        self.target_class = target_class
+
+
+class ProviderCloudResourceGenerator:
+
+    def __init__(self, name: str, region: CloudRegion):
+        self.name = name
+        self.region = region
+
+    def generate_resources(self) -> list[ProviderCloudResource]:
+        raise NotImplementedError()
+
+
 class MultiCloudResourceType:
 
-    gcp_type = None
-    gcp_multi_cloud_type = GcpCloudResource
-    aws_type = None
-    aws_multi_cloud_type = AwsCloudResource
+    def __init__(self, provider_map: dict[CloudProvider, type[ProviderCloudResourceGenerator]]):
+        self.provider_map = provider_map
 
-    def __init__(self, region: CloudRegion, name: str):
-        self.region = region
-        self.name = name
 
-    def gcp_kwargs(self) -> dict:
-        return {}
+class MultiCloudResourceCreation:
 
-    def aws_kwargs(self) -> dict:
-        return {}
+    def __init__(self,
+                 main_resource: MultiCloudResource or None,
+                 secondary_resources: list[MultiCloudResource] = None):
+        if secondary_resources is None:
+            secondary_resources = []
+        self.main_resource = main_resource
+        self.secondary_resources = secondary_resources
 
 
 class MultiCloudResourceFactory:
@@ -47,20 +63,14 @@ class MultiCloudResourceFactory:
         self.region = region
         self.provider = provider
 
-    def create(self,
-               resource_type: type(MultiCloudResourceType),
-               name: str,
-               **kwargs):
-        p_class = resource_type.gcp_type if self.provider == CloudProvider.GCP else resource_type.aws_type
-        if p_class is None:
-            logging.info(f"Skipping this resource [ {name} ] of type [ {resource_type} ] "
-                         f"because there no abstraction for provider [ {self.provider.name} ]")
-            return None
-        resource_factory = resource_type(name=name, region=self.region, **kwargs)
-        props = resource_factory.gcp_kwargs if self.provider == CloudProvider.GCP else resource_factory.aws_kwargs
-
-        pulumi_resource = p_class(resource_name=name, **props())
-        pulumi_resource.__class__ = resource_type.gcp_multi_cloud_type \
-            if self.provider == CloudProvider.GCP \
-            else resource_type.aws_multi_cloud_type
-        return pulumi_resource
+    def create(self, resource_type: MultiCloudResourceType, name: str, **kwargs) -> MultiCloudResourceCreation:
+        provider_resource_generator = resource_type.provider_map.get(self.provider)
+        if provider_resource_generator is None:
+            return MultiCloudResourceCreation(None)
+        provider_resources = provider_resource_generator(name, self.region, **kwargs).generate_resources()
+        for provider_response in provider_resources:
+            if provider_response is None:
+                continue
+            provider_response.resource.__class__ = provider_response.target_class
+        main_resource = provider_resources[0].resource if len(provider_resources) > 0 else None
+        return MultiCloudResourceCreation(main_resource, [x.resource for x in provider_resources[1:]])
