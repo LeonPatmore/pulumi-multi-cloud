@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "407e60250b5a6d8265ad95fe1d5f9d3e845f2ad999ee09348a552b8f692df6e8"
+            "sha256": "83ca32c566f42e23273ead4bc701c82a5460a4243f73cfbaa4cd56dbabec2e9d"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -119,10 +119,10 @@
         },
         "pulumi": {
             "hashes": [
-                "sha256:6b7e4883d310baeb1e5e4075941431a748ce669251d354024cbc98b9435f54f7"
+                "sha256:9fbccd50a7a2045fc848db1119b14f2fd608d8004c0f882077434b05be0e5c05"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.47.0"
+            "version": "==3.47.1"
         },
         "pulumi-aws": {
             "hashes": [
@@ -131,19 +131,19 @@
             "index": "pypi",
             "version": "==5.21.1"
         },
+        "pulumi-azure-native": {
+            "hashes": [
+                "sha256:4ccc95f3278eac472c1215e8de59117f06d7d4a914fcc603fb726c71ff78f42b"
+            ],
+            "index": "pypi",
+            "version": "==1.86.0"
+        },
         "pulumi-gcp": {
             "hashes": [
                 "sha256:14f2e101c0cc71452843e433ed587538cbc797ae410c318196a2d149ce1f9c23"
             ],
             "index": "pypi",
             "version": "==6.43.0"
-        },
-        "pulumi-kafka": {
-            "hashes": [
-                "sha256:aeab80b26f320ccf3f708fd3ace11fc7d5b967ab5450fe46f7a80f2509ee9a15"
-            ],
-            "index": "pypi",
-            "version": "==3.3.0"
         },
         "pyyaml": {
             "hashes": [

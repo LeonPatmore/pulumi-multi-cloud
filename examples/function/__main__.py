@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../..')
 import pulumi
 from pulumi import AssetArchive, FileArchive
 
@@ -5,7 +7,7 @@ from pulumi_multi_cloud.common import CloudProvider, CloudRegion, MultiCloudReso
 from pulumi_multi_cloud.resources.function import FunctionHandler, FunctionRuntime, FunctionHttpTrigger
 from pulumi_multi_cloud.resources.types import DefaultTypes
 
-code = AssetArchive({".": FileArchive("./example")})
+code = AssetArchive({".": FileArchive("../../example")})
 
 
 def my_cool_exposed_function(gen: MultiCloudResourceFactory):

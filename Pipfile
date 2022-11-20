@@ -1,4 +1,4 @@
 [packages]
 pulumi-aws = "*"
 pulumi-gcp = "*"
-pulumi-kafka = "*"
+pulumi-azure-native = "*"

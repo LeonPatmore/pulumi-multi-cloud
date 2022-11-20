@@ -3,7 +3,7 @@
 ## Resources
 
 - https://www.pulumi.com/docs/intro/concepts/how-pulumi-works/
-- https://github.com/pulumi/examples/blob/master/aws-py-s3-folder/__main__.py
+- https://github.com/pulumi/examples
 
 ### Existing Solutions
 
@@ -17,6 +17,7 @@
 
 - AWS CLI
 - GCP CLI
+- Azure CLI
 - Pulumi CLI
 - pipenv
 
@@ -28,3 +29,7 @@ Ensure you create a `.env` file with the following contents:
 export PROJECT_ID=<gcp project id>
 export PULUMI_CONFIG_PASSPHRASE=<pulumi config password>
 ```
+
+## Useful Commands
+
+- `pulumi stack ls`: List your current stacks.
