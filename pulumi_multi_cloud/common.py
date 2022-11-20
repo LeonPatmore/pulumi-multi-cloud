@@ -23,7 +23,7 @@ DEFAULT_PROVIDER = CloudProvider.AWS
 class MultiCloudResourceCreation:
 
     def __init__(self,
-                 main_resource: MultiCloudResource or None,
+                 main_resource: MultiCloudResource,
                  secondary_resources: list[type(MultiCloudResource)] = None):
         if secondary_resources is None:
             secondary_resources = []
