@@ -44,6 +44,8 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
         storage_token = storage.list_storage_account_service_sas_output(
             account_name=storage_account.name,
             shared_access_expiry_time="2030-01-01",
+            shared_access_start_time="2021-01-01",
+            resource=storage.SignedResource.C,
             protocols=storage.HttpProtocol.HTTPS,
             resource_group_name=self.resource_group.name,
             permissions=storage.Permissions.R,
@@ -59,8 +61,8 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
                           site_config=SiteConfigArgs(
                               app_settings=[
                                   {
-                                      "name": "AzureWebJobsStorage",
-                                      "value": storage_connection_string
+                                      "name": "runtime",
+                                      "value": "python"
                                   },
                                   {
                                       "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -74,8 +76,7 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
                                       "name": "WEBSITE_RUN_FROM_PACKAGE",
                                       "value": code_url
                                   }
-                              ],
-                              python_version="3.9"
+                              ]
                           ))
         return AzureFunctionCreation(AzureCloudResource(function), [
             AzureCloudResource(storage_account),
