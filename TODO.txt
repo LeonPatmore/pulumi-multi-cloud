@@ -1,3 +1,4 @@
 Better region abstraction
 Improve function file handling
 DONE: Split the function handler, so it can support the different interfaces for each cloud provider
+DONE: Investigate issue with outputs

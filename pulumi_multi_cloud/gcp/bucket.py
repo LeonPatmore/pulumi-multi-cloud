@@ -7,4 +7,4 @@ from pulumi_multi_cloud.gcp.common import GcpCloudResource
 class GcpBucketGenerator(ProviderCloudResourceGenerator):
 
     def generate_resources(self) -> MultiCloudResourceCreation:
-        return MultiCloudResourceCreation(GcpCloudResource.given(bucket.Bucket(self.name, location=self.region.name)))
+        return MultiCloudResourceCreation(GcpCloudResource(bucket.Bucket(self.name, location=self.region.name)))

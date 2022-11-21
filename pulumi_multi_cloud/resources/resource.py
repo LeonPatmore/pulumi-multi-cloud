@@ -2,12 +2,10 @@ import pulumi
 from pulumi import Output
 
 
-class MultiCloudResource(pulumi.CustomResource):
+class MultiCloudResource:
+
+    def __init__(self, resource: type(pulumi.Resource)):
+        self.resource = resource
 
     def get_id(self) -> Output:
         raise NotImplementedError()
-
-    @staticmethod
-    def given(resource: pulumi.Resource):
-        resource.__class__ = MultiCloudResource
-        return resource

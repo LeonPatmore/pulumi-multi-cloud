@@ -23,7 +23,7 @@ DEFAULT_PROVIDER = CloudProvider.AWS
 class MultiCloudResourceCreation:
 
     def __init__(self,
-                 main_resource: MultiCloudResource,
+                 main_resource: MultiCloudResource or None,
                  secondary_resources: list[type(MultiCloudResource)] = None):
         if secondary_resources is None:
             secondary_resources = []
@@ -68,7 +68,7 @@ class MultiCloudResourceFactory:
     def create(self,
                resource_type: MultiCloudResourceType,
                name: str,
-               fail_on_unknown: bool = True,
+               fail_on_unknown: bool = False,
                **kwargs) -> type(MultiCloudResourceCreation):
         provider_resource_generator = resource_type.provider_map.get(self.provider)
         if provider_resource_generator is None:
@@ -76,4 +76,4 @@ class MultiCloudResourceFactory:
                 raise RuntimeError(f"Not sure how to generate resource [ {name} ] for provider [ {self.provider} ]")
             return MultiCloudResourceCreation(None)
         final_kwargs = kwargs | self.provider_global_attributes
-        return provider_resource_generator(name, self.region, **final_kwargs).generate_resources()
+        return provider_resource_generator(name=name, region=self.region, **final_kwargs).generate_resources()

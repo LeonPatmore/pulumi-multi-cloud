@@ -14,7 +14,7 @@ GCP_RUNTIME = {
 class GcpFunctionCreation(MultiCloudFunctionCreation):
 
     def http_url(self) -> pulumi.Output[str]:
-        return self.main_resource.https_trigger_url
+        return self.main_resource.resource.https_trigger_url
 
 
 class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
@@ -33,9 +33,9 @@ class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
                             source_archive_object=code_object.name,
                             trigger_http=self.http_trigger is not None,
                             region="europe-west2")
-        creation = GcpFunctionCreation(GcpCloudResource.given(function))\
-            .with_resource(GcpCloudResource.given(bucket))\
-            .with_resource(GcpCloudResource.given(code_object))
+        creation = GcpFunctionCreation(GcpCloudResource(function))\
+            .with_resource(GcpCloudResource(bucket))\
+            .with_resource(GcpCloudResource(code_object))
 
         if self.http_trigger is not None and self.http_trigger.public:
             iam = FunctionIamMember("public",
@@ -44,5 +44,5 @@ class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
                                     region="europe-west2",
                                     role="roles/cloudfunctions.invoker",
                                     member="allUsers")
-            creation.with_resource(GcpCloudResource.given(iam))
+            creation.with_resource(GcpCloudResource(iam))
         return creation

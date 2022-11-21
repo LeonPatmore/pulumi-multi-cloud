@@ -19,4 +19,4 @@ class AzureBucketGenerator(ProviderCloudResourceGenerator):
                                                  kind=storage.Kind.STORAGE_V2,
                                                  resource_group_name=self.resource_group.name,
                                                  sku=storage.SkuArgs(name=storage.SkuName.STANDARD_LRS))
-        return MultiCloudResourceCreation(AzureCloudResource.given(storage_account))
+        return MultiCloudResourceCreation(AzureCloudResource(storage_account))

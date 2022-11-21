@@ -15,4 +15,4 @@ class AwsPermissionsGenerator(ProviderCloudResourceGenerator):
                                                                         type="Service")]
             )
         ]).json)
-        return MultiCloudResourceCreation(AwsCloudResource.given(role))
+        return MultiCloudResourceCreation(AwsCloudResource(role))

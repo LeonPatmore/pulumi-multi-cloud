@@ -6,8 +6,10 @@ from pulumi import AssetArchive, FileArchive
 from pulumi_multi_cloud.common import CloudProvider, CloudRegion, MultiCloudResourceFactory
 from pulumi_multi_cloud.resources.function import FunctionHandler, FunctionRuntime, FunctionHttpTrigger
 from pulumi_multi_cloud.resources.types import DefaultTypes
+from pulumi_multi_cloud.azure.common import AzureResourceFactory
+from pulumi_multi_cloud.azure.resource_group import azure_resource_group
 
-code = AssetArchive({".": FileArchive("../../example")})
+code = AssetArchive({".": FileArchive("my_function")})
 
 
 def my_cool_exposed_function(gen: MultiCloudResourceFactory):
@@ -28,3 +30,4 @@ def my_cool_exposed_function(gen: MultiCloudResourceFactory):
 
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS))
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.GCP))
+my_cool_exposed_function(AzureResourceFactory(azure_resource_group("function-example"), region=CloudRegion.EU))

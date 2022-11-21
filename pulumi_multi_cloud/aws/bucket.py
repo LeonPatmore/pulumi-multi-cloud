@@ -7,4 +7,4 @@ from pulumi_multi_cloud.common import ProviderCloudResourceGenerator, MultiCloud
 class AwsBucketGenerator(ProviderCloudResourceGenerator):
 
     def generate_resources(self) -> MultiCloudResourceCreation:
-        return MultiCloudResourceCreation(AwsCloudResource.given(s3.Bucket(self.name)))
+        return MultiCloudResourceCreation(AwsCloudResource(s3.Bucket(self.name)))

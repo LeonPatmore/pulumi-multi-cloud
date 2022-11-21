@@ -39,7 +39,7 @@ class ProviderFunctionResourceGenerator(ProviderCloudResourceGenerator):
                  runtime: FunctionRuntime,
                  function_handler: FunctionHandler,
                  files: Archive,
-                 permissions: MultiCloudResource,
+                 permissions: type(MultiCloudResource),
                  http_trigger: FunctionHttpTrigger = None):
         super().__init__(name, region)
         self.runtime = runtime

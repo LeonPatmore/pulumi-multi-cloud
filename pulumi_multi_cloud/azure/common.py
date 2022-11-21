@@ -1,4 +1,3 @@
-import pulumi
 from pulumi_azure_native.resources import ResourceGroup
 
 from pulumi_multi_cloud.common import MultiCloudResourceFactory, CloudRegion, DEFAULT_REGION, CloudProvider
@@ -13,12 +12,13 @@ class AzureResourceFactory(MultiCloudResourceFactory):
         })
 
 
+class AzureResourceGenerator:
+
+    def __init__(self, resource_group):
+        self.resource_group = resource_group
+
+
 class AzureCloudResource(MultiCloudResource):
 
     def get_id(self) -> str:
-        return self.identity
-
-    @staticmethod
-    def given(resource: pulumi.Resource):
-        resource.__class__ = AzureCloudResource
-        return resource
+        return self.resource.identity
