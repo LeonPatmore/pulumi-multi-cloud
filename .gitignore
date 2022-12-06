@@ -2,3 +2,4 @@
 .env
 **/*.pyc
 **/Pulumi.*.yaml
+**/.pytest_cache
