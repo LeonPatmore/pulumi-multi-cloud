@@ -1,0 +1,29 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "ebef4af15755cf7507500fbd9c39d55e617fddaf36e9dd55549ab774a4949909"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
+        "sources": [
+            {
+                "name": "aws",
+                "url": "https://aws:$CODEARTIFACT_AUTH_TOKEN@test-136306849848.d.codeartifact.eu-west-1.amazonaws.com/pypi/LeonPatmore/simple/",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "python-serverless": {
+            "hashes": [
+                "sha256:0a6a2b7189e074dead7c62fc301450ee8d6973e74059cce7e41e382e838cc653",
+                "sha256:0c18de5781730c38f95733df26c956811b38b199ec05e494a6bb9326fdd724e7",
+                "sha256:2bdfc8bff524f9f35909ba094f9cde391918f896c315e00efb5d5c91d2ed45dc",
+                "sha256:965f6b720d7fd3a4887e9450c7c4fc84679d4ae4cab4088d609e2a30b5c70258"
+            ],
+            "index": "aws",
+            "version": "==0.0.1"
+        }
+    },
+    "develop": {}
+}

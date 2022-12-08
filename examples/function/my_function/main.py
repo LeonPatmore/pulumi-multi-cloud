@@ -1,11 +1,7 @@
-
-def handle_aws(event, context):
-    return {
-        "isBase64Encoded": True,
-        "statusCode": 200,
-        "body": "hi there!"
-    }
+from python_serverless.serverless_function import serverless_function
+from python_serverless.serverless_http import HttpResponse, HttpRequest
 
 
-def handle_gcp(request):
-    return "hi there!"
+@serverless_function()
+def handle(request: HttpRequest):
+    return HttpResponse(status=202, body=f"hello {request.body}")

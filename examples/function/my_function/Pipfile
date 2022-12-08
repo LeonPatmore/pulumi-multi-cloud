@@ -1,0 +1,7 @@
+[[source]]
+url = "https://aws:$CODEARTIFACT_AUTH_TOKEN@test-136306849848.d.codeartifact.eu-west-1.amazonaws.com/pypi/LeonPatmore/simple/"
+verify_ssl = true
+name = "aws"
+
+[packages]
+python-serverless = "*"
