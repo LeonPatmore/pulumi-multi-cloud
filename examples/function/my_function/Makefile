@@ -5,4 +5,5 @@ clean:
 	rm -r build
 
 build:
-	pip install python-serverless --upgrade --target .
+# TODO: Copy package from venv into root.
+	pipenv --venv
