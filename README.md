@@ -30,6 +30,12 @@ export PROJECT_ID=<gcp project id>
 export PULUMI_CONFIG_PASSPHRASE=<pulumi config password>
 ```
 
+## Setting up Pulumi
+
+The easiest way to set up Pulumi is to use a local storage:
+
+`pulumi login --local`
+
 ## Running Examples
 
 In the following commands, replace `<example_dir>` with one of the following:
@@ -37,9 +43,13 @@ In the following commands, replace `<example_dir>` with one of the following:
 - function
 - storage
 
+Setup the example:
+
+`make create-stack example=<example_dir>`
+
 List the stacks:
 
-`make list-stacks example=<example_dir`
+`make list-stacks example=<example_dir>`
 
 To run an example:
 
