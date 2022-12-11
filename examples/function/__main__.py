@@ -14,7 +14,7 @@ code = AssetArchive({".": FileArchive("my_function")})
 
 def my_cool_exposed_function(gen: MultiCloudResourceFactory):
     permissions = gen.create(DefaultTypes.Permissions.value, name="function-permissions").main_resource
-    function_handler = FunctionHandler(method="handle_aws" if gen.provider == CloudProvider.AWS else "handle_gcp")
+    function_handler = FunctionHandler()
     function_trigger = FunctionHttpTrigger(public=True)
     function = gen.create(DefaultTypes.Function.value,
                           "leon-function",
@@ -30,4 +30,4 @@ def my_cool_exposed_function(gen: MultiCloudResourceFactory):
 
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS))
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.GCP))
-my_cool_exposed_function(AzureResourceFactory(azure_resource_group("function-example"), region=CloudRegion.EU))
+# my_cool_exposed_function(AzureResourceFactory(azure_resource_group("function-example"), region=CloudRegion.EU))

@@ -30,6 +30,17 @@ export PROJECT_ID=<gcp project id>
 export PULUMI_CONFIG_PASSPHRASE=<pulumi config password>
 ```
 
-## Useful Commands
+## Running Examples
 
-- `pulumi stack ls`: List your current stacks.
+In the following commands, replace `<example_dir>` with one of the following:
+
+- function
+- storage
+
+List the stacks:
+
+`make list-stacks example=<example_dir`
+
+To run an example:
+
+`make update-stack example=<example_dir>`

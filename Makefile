@@ -10,10 +10,16 @@ create-stack:
 	pulumi stack init example
 
 update-stack:
-	pipenv run pulumi up
+	cd examples/$(example) &&  pipenv run pulumi up
 
 cleanup:
 	pulumi destroy
 
 check-plugins:
 	pulumi plugin ls
+
+list-stacks:
+	cd examples/$(example) && pulumi stack ls
+
+refresh:
+	cd examples/$(example) && pulumi refresh
