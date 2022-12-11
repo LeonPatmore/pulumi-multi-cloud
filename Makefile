@@ -3,11 +3,11 @@ include .env
 setup:
 	pipenv install
 	pulumi login --local
-	pulumi config set gcp:project ${PROJECT_ID}
-	pulumi config set gcp:region EU
 
 create-stack:
 	cd examples/$(example) && pulumi stack init example
+	cd examples/$(example) && pulumi config set gcp:project ${PROJECT_ID}
+	cd examples/$(example) && pulumi config set gcp:region EU
 
 update-stack:
 	cd examples/$(example) &&  pipenv run pulumi up

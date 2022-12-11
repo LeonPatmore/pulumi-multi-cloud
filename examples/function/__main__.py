@@ -28,6 +28,6 @@ def my_cool_exposed_function(gen: MultiCloudResourceFactory):
     pulumi.export(f"function_url_{gen.provider.name}", function.http_url())
 
 
-my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS))
+# my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS))
 my_cool_exposed_function(MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.GCP))
 # my_cool_exposed_function(AzureResourceFactory(azure_resource_group("function-example"), region=CloudRegion.EU))

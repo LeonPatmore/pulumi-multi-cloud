@@ -36,6 +36,8 @@ The easiest way to set up Pulumi is to use a local storage:
 
 `pulumi login --local`
 
+Or use `make setup`.
+
 ## Running Examples
 
 In the following commands, replace `<example_dir>` with one of the following:
@@ -50,6 +52,10 @@ Setup the example:
 List the stacks:
 
 `make list-stacks example=<example_dir>`
+
+Refresh a stack:
+
+`make refresh example=<example_dir>`
 
 To run an example:
 
