@@ -66,4 +66,4 @@ To run an example:
 ### GCP Functions
 
 - Uploading function code with embedded folders/modules with Windows will not work for GCP functions. This is because windows uses
-forwarded slashes instead of backslashes.
+back-slashes instead of forward-slashes.
