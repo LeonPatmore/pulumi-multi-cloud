@@ -60,3 +60,10 @@ Refresh a stack:
 To run an example:
 
 `make update-stack example=<example_dir>`
+
+## Known Issues
+
+### GCP Functions
+
+- Uploading function code with embedded folders/modules with Windows will not work for GCP functions. This is because windows uses
+forwarded slashes instead of backslashes.

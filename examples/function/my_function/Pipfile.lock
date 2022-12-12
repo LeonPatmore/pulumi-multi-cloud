@@ -16,13 +16,11 @@
     "default": {
         "python-serverless": {
             "hashes": [
-                "sha256:0a6a2b7189e074dead7c62fc301450ee8d6973e74059cce7e41e382e838cc653",
-                "sha256:0c18de5781730c38f95733df26c956811b38b199ec05e494a6bb9326fdd724e7",
-                "sha256:2bdfc8bff524f9f35909ba094f9cde391918f896c315e00efb5d5c91d2ed45dc",
-                "sha256:965f6b720d7fd3a4887e9450c7c4fc84679d4ae4cab4088d609e2a30b5c70258"
+                "sha256:1470878590a3a37156d95665151a61505699f21f10b67de642fd1e489536300d",
+                "sha256:174bc0853981aeb871b7888d7e4ec52e8526be356486fe7a067c2f81ac29c526"
             ],
             "index": "aws",
-            "version": "==0.0.1"
+            "version": "==0.0.5"
         }
     },
     "develop": {}
