@@ -1,23 +1,15 @@
 import sys
-
-import pulumi
-from pulumi_aws import s3
-
 sys.path.append('../..')
 
-from pulumi_multi_cloud.azure.resource_group import azure_resource_group
-from pulumi_multi_cloud.common import CloudRegion, MultiCloudResourceFactory
+import pulumi
+
+from pulumi_multi_cloud.multi_cloud_generator import multi_cloud_generator
+from pulumi_multi_cloud.common import MultiCloudResourceFactory, CloudRegion, CloudProvider
 from pulumi_multi_cloud.resources.types import DefaultTypes
 
-# resource_group = azure_resource_group("storage-example")
-# gen = AzureResourceFactory(resource_group, region=CloudRegion.EU)
-gen = MultiCloudResourceFactory()
 
-bucket = gen.create(DefaultTypes.Bucket.value, "leon-example-2")
+@multi_cloud_generator(gens=[MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS)])
+def my_bucket(gen: MultiCloudResourceFactory):
+    bucket = gen.create(DefaultTypes.Bucket.value, "leon-example-2")
+    pulumi.export("bucket_id", bucket.get_id())
 
-bucket2 = s3.Bucket("leon-example-3")
-
-final_resource = bucket.main_resource
-output_generic = final_resource.bucket_domain_name
-print(type(output_generic))
-pulumi.export("bucket_id", output_generic)

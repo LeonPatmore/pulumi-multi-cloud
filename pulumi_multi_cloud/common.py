@@ -1,5 +1,7 @@
 import enum
 
+from pulumi import Output
+
 from pulumi_multi_cloud.resources.resource import MultiCloudResource
 
 
@@ -35,6 +37,9 @@ class MultiCloudResourceCreation:
             self.secondary_resources = []
         self.secondary_resources.append(resource)
         return self
+
+    def get_id(self) -> Output:
+        return self.main_resource.get_id()
 
 
 class ProviderCloudResourceGenerator:
