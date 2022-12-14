@@ -1,9 +1,10 @@
 import enum
+from abc import ABC
 
 import pulumi
 from pulumi import Archive
 
-from pulumi_multi_cloud.common import CloudRegion, ProviderCloudResourceGenerator, MultiCloudResourceCreation
+from pulumi_multi_cloud.common import CloudRegion, ProviderCloudResourceGenerator
 from pulumi_multi_cloud.resources.resource import MultiCloudResource
 
 
@@ -25,7 +26,7 @@ class FunctionHttpTrigger:
         self.public = public
 
 
-class MultiCloudFunctionCreation(MultiCloudResourceCreation):
+class MultiCloudFunction(MultiCloudResource, ABC):
 
     def http_url(self) -> pulumi.Output[str]:
         raise NotImplementedError()
@@ -48,5 +49,5 @@ class ProviderFunctionResourceGenerator(ProviderCloudResourceGenerator):
         self.permissions = permissions
         self.http_trigger = http_trigger
 
-    def generate_resources(self) -> MultiCloudFunctionCreation:
+    def generate_resources(self) -> MultiCloudFunction:
         raise NotImplementedError()

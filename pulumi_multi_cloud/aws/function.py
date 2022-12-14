@@ -9,16 +9,14 @@ from pulumi_aws.apigateway import RestApi
 from pulumi_aws.lambda_ import Function
 
 from pulumi_multi_cloud.aws.common import AwsCloudResource
-from pulumi_multi_cloud.common import MultiCloudResourceCreation
-from pulumi_multi_cloud.resources.function import FunctionRuntime, ProviderFunctionResourceGenerator, \
-    MultiCloudFunctionCreation
+from pulumi_multi_cloud.resources.function import FunctionRuntime, ProviderFunctionResourceGenerator, MultiCloudFunction
 
 AWS_RUNTIME = {
     FunctionRuntime.Python39: "python3.9"
 }
 
 
-class AwsFunctionCreation(MultiCloudFunctionCreation):
+class AwsFunction(AwsCloudResource, MultiCloudFunction):
 
     def http_url(self) -> pulumi.Output[str]:
         return self.secondary_resources[1].resource.invoke_url
@@ -80,16 +78,16 @@ class AwsFunctionGenerator(ProviderFunctionResourceGenerator):
                                                opts=ResourceOptions(depends_on=[api]))
         return api, deployment, invoke_permission
 
-    def generate_resources(self) -> MultiCloudResourceCreation:
+    def generate_resources(self) -> MultiCloudFunction:
         function = Function(self.name,
                             code=self.files,
                             runtime=AWS_RUNTIME[self.runtime],
                             handler=f"{self.function_handler.file}.{self.function_handler.method}",
                             role=self.permissions.resource.arn)
-        creation = AwsFunctionCreation(AwsCloudResource(function))
+        creation = AwsFunction(function)
         if self.http_trigger:
             api, deployment, invoke_permission = self._expose_http(function)
-            creation.with_resource(AwsCloudResource(api))\
-                .with_resource(AwsCloudResource(deployment))\
-                .with_resource(AwsCloudResource(invoke_permission))
+            creation.with_child_resource(AwsCloudResource(api))\
+                .with_child_resource(AwsCloudResource(deployment))\
+                .with_child_resource(AwsCloudResource(invoke_permission))
         return creation

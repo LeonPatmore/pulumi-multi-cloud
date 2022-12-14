@@ -14,7 +14,7 @@ code = AssetArchive({".": FileArchive("my_function")})
 @multi_cloud_generator(gens=[MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.AWS),
                              MultiCloudResourceFactory(region=CloudRegion.EU, provider=CloudProvider.GCP)])
 def my_cool_exposed_function(gen: MultiCloudResourceFactory):
-    permissions = gen.create(DefaultTypes.Permissions.value, name="function-permissions").main_resource
+    permissions = gen.create(DefaultTypes.Permissions.value, name="function-permissions")
     function_handler = FunctionHandler()
     function_trigger = FunctionHttpTrigger(public=True)
     function = gen.create(DefaultTypes.Function.value,
@@ -25,5 +25,5 @@ def my_cool_exposed_function(gen: MultiCloudResourceFactory):
                           permissions=permissions,
                           http_trigger=function_trigger)
 
-    pulumi.export(f"function_id_{gen.provider.name}", function.main_resource.get_id())
+    pulumi.export(f"function_id_{gen.provider.name}", function.get_id())
     pulumi.export(f"function_url_{gen.provider.name}", function.http_url())

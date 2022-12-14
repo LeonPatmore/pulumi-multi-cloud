@@ -5,7 +5,7 @@ setup:
 	pulumi login --local
 
 create-stack:
-	cd examples/$(example) && pulumi stack init example
+	cd examples/$(example) && pulumi stack init $(example)
 	cd examples/$(example) && pulumi config set gcp:project ${PROJECT_ID}
 	cd examples/$(example) && pulumi config set gcp:region EU
 

@@ -6,13 +6,13 @@ from pulumi_azure_native.web import WebApp, SiteConfigArgs
 
 from pulumi_multi_cloud.azure.bucket import AzureBucketGenerator
 from pulumi_multi_cloud.azure.common import AzureResourceGenerator, AzureCloudResource
-from pulumi_multi_cloud.resources.function import ProviderFunctionResourceGenerator, MultiCloudFunctionCreation
+from pulumi_multi_cloud.resources.function import ProviderFunctionResourceGenerator, MultiCloudFunction
 
 
-class AzureFunctionCreation(MultiCloudFunctionCreation):
+class AzureFunction(AzureCloudResource, MultiCloudFunction):
 
     def http_url(self) -> pulumi.Output[str]:
-        return self.main_resource.resource.default_host_name
+        return self.resource.default_host_name
 
 
 class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGenerator):
@@ -22,8 +22,7 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
         AzureResourceGenerator.__init__(self, resource_group)
 
     def _upload_code(self) -> tuple:
-        storage_account = AzureBucketGenerator(self.name, self.region, self.resource_group)\
-            .generate_resources().main_resource.resource
+        storage_account = AzureBucketGenerator(self.name, self.region, self.resource_group).generate_resources().resource
         container = storage.BlobContainer(f"{self.name}-code-container",
                                           resource_group_name=self.resource_group.name,
                                           account_name=storage_account.name)
@@ -34,7 +33,7 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
                                  source=self.files)
         return storage_account, container, code_blob
 
-    def generate_resources(self) -> MultiCloudFunctionCreation:
+    def generate_resources(self) -> MultiCloudFunction:
         storage_account, container, code_blob = self._upload_code()
         storage_key = storage.list_storage_account_keys_output(
             resource_group_name=self.resource_group.name,
@@ -77,7 +76,7 @@ class AzureFunctionGenerator(ProviderFunctionResourceGenerator, AzureResourceGen
                               ],
                               python_version="3.9"
                           ))
-        return AzureFunctionCreation(AzureCloudResource(function), [
+        return AzureFunction(function, [
             AzureCloudResource(storage_account),
             AzureCloudResource(container),
             AzureCloudResource(code_blob)
