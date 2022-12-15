@@ -3,4 +3,5 @@ Improve function file handling.
 DONE: Split the function handler, so it can support the different interfaces for each cloud provider.
 DONE: Investigate issue with outputs.
 DONE (documented): GCP doesn't support having packages inside the function zip file (windows bug)?
-Improve makefile for function example.
+Improve makefile for function example (autocopy the packages in the pipfile into the directory).
+Push to library.

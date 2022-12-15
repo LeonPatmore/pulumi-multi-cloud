@@ -26,6 +26,13 @@ class FunctionHttpTrigger:
         self.public = public
 
 
+class FunctionQueueTrigger:
+
+    def __init__(self, name: str, queue: MultiCloudResource):
+        self.name = name
+        self.queue = queue
+
+
 class MultiCloudFunction(MultiCloudResource, ABC):
 
     def http_url(self) -> pulumi.Output[str]:
@@ -41,13 +48,17 @@ class ProviderFunctionResourceGenerator(ProviderCloudResourceGenerator):
                  function_handler: FunctionHandler,
                  files: Archive,
                  permissions: type(MultiCloudResource),
-                 http_trigger: FunctionHttpTrigger = None):
+                 http_trigger: FunctionHttpTrigger = None,
+                 queue_triggers: list[FunctionQueueTrigger] = None):
+        if queue_triggers is None:
+            queue_triggers = []
         super().__init__(name, region)
         self.runtime = runtime
         self.function_handler = function_handler
         self.files = files
         self.permissions = permissions
         self.http_trigger = http_trigger
+        self.queue_triggers = queue_triggers
 
     def generate_resources(self) -> MultiCloudFunction:
         raise NotImplementedError()
