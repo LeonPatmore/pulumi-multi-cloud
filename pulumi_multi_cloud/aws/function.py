@@ -88,7 +88,10 @@ class AwsFunctionGenerator(ProviderFunctionResourceGenerator):
                             "Version": "2012-10-17",
                             "Statement": [{
                                 "Action": [
-                                    "sqs:ReceiveMessage"
+                                    "sqs:ReceiveMessage",
+                                    "sqs:DeleteMessage",
+                                    "sqs:DeleteMessageBatch",
+                                    "sqs:GetQueueAttributes"
                                 ],
                                 "Effect": "Allow",
                                 "Resource": arn,
