@@ -20,8 +20,8 @@ class GcpFunction(GcpCloudResource, MultiCloudFunction):
 class GcpFunctionGenerator(ProviderFunctionResourceGenerator):
 
     def _upload_gcp_code(self) -> tuple:
-        bucket = storage.Bucket(f"{self.name}-code", location=self.region.name)
-        code_object = storage.BucketObject("python-zip", bucket=bucket.name, source=self.files)
+        bucket = storage.Bucket(f"{self.name}-bucket", location=self.region.name)
+        code_object = storage.BucketObject(f"{self.name}-code", bucket=bucket.name, source=self.files)
         return bucket, code_object
 
     def generate_resources(self) -> MultiCloudResource:
